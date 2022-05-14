@@ -5,7 +5,9 @@
   using System.Linq;
   using System.Text;
   using System.Threading.Tasks;
+  using Moq;
   using NUnit.Framework;
+  using PandoInjector.Dependencies;
   using PandoInjector.UnitTests.TestingObjects;
 
   /// <summary>
@@ -22,7 +24,7 @@
     /// that it registers a class with its lookup key.
     /// </remarks>
     [Test]
-    private void RegisteringTakesInterfaceAndClass()
+    public void RegisteringTakesInterfaceAndClass()
     {
       var container = new Container();
       bool success = container.Register<ISimple, Simple>();
@@ -34,13 +36,42 @@
     /// Registering the same class twice returns false.
     /// </summary>
     [Test]
-    private void RegisteringSameClassTwiceReturnsFalse()
+    public void RegisteringSameClassTwiceReturnsFalse()
     {
       var container = new Container();
       container.Register<ISimple, Simple>();
       bool success = container.Register<ISimple, Simple>();
 
       Assert.IsFalse(success);
+    }
+
+    /// <summary>
+    /// Builds collection with no dependencies.
+    /// </summary>
+    [Test]
+    public void BuildWithNoDependencies()
+    {
+      var container = new Container();
+      container.Register<ISimple, Simple>();
+      Assert.DoesNotThrow(() => container.Build());
+    }
+
+    /// <summary>
+    /// Builds container with dependencies.
+    /// </summary>
+    [Test]
+    public void BuildWithDependencies()
+    {
+      var dependencyFinderMock = new Mock<IDependencyFinder>();
+      dependencyFinderMock.Setup(x => x.FindDependencies(It.IsAny<Type>())).Returns(Array.Empty<Type>());
+
+      var container = new Container(dependencyFinderMock.Object);
+      container.Register<ISimple, Simple>();
+      container.Register<ISimpleDependency, SimpleDependency>();
+
+      container.Build();
+
+      dependencyFinderMock.Verify(x => x.FindDependencies(typeof(SimpleDependency)), Times.Once());
     }
   }
 }
