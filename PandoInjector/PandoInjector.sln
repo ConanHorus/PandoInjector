@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PandoInjector", "PandoInjector\PandoInjector.csproj", "{DA1DF947-2036-4B64-9B15-1B8139488BC3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{08ACE741-774C-4070-8CA1-608CEF8B78D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PandoInjector.UnitTests", "PandoInjector.UnitTests\PandoInjector.UnitTests.csproj", "{0787B887-BC94-4757-BB90-50662916DEB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PandoInjector.IntegrationTests", "PandoInjector.IntegrationTests\PandoInjector.IntegrationTests.csproj", "{FA2B7324-F135-4539-B063-8E97126371A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PandoInjector.BenchMarks", "PandoInjector.BenchMarks\PandoInjector.BenchMarks.csproj", "{5957158D-C9F8-4E24-95F0-C49E4E331051}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA1DF947-2036-4B64-9B15-1B8139488BC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA1DF947-2036-4B64-9B15-1B8139488BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA1DF947-2036-4B64-9B15-1B8139488BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA1DF947-2036-4B64-9B15-1B8139488BC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0787B887-BC94-4757-BB90-50662916DEB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0787B887-BC94-4757-BB90-50662916DEB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0787B887-BC94-4757-BB90-50662916DEB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0787B887-BC94-4757-BB90-50662916DEB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA2B7324-F135-4539-B063-8E97126371A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA2B7324-F135-4539-B063-8E97126371A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA2B7324-F135-4539-B063-8E97126371A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA2B7324-F135-4539-B063-8E97126371A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5957158D-C9F8-4E24-95F0-C49E4E331051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5957158D-C9F8-4E24-95F0-C49E4E331051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5957158D-C9F8-4E24-95F0-C49E4E331051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5957158D-C9F8-4E24-95F0-C49E4E331051}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0787B887-BC94-4757-BB90-50662916DEB6} = {08ACE741-774C-4070-8CA1-608CEF8B78D7}
+		{FA2B7324-F135-4539-B063-8E97126371A1} = {08ACE741-774C-4070-8CA1-608CEF8B78D7}
+		{5957158D-C9F8-4E24-95F0-C49E4E331051} = {08ACE741-774C-4070-8CA1-608CEF8B78D7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {93395986-DE59-4265-B2B9-ED49CC72BE50}
+	EndGlobalSection
+EndGlobal
