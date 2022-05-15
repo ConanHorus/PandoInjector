@@ -4,11 +4,13 @@ namespace PandoInjector
 {
   using System;
   using System.Collections.Generic;
+  using System.Diagnostics.CodeAnalysis;
   using System.Linq;
   using System.Runtime.CompilerServices;
   using System.Text;
   using System.Threading.Tasks;
   using PandoInjector.Dependencies;
+  using PandoInjector.Exceptions;
   using PandoInjector.Providers;
 
   /// <summary>
@@ -38,10 +40,18 @@ namespace PandoInjector
     public Container() => this.dependencyFinder = new DependencyFinder();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Container"/> class.
+    /// Resolves the instance of T.
     /// </summary>
-    /// <param name="dependencyFinder">The dependency finder.</param>
-    internal Container(IDependencyFinder dependencyFinder) => this.dependencyFinder = dependencyFinder;
+    /// <returns>A T.</returns>
+    /// <typeparam name="T">Type to resolve.</typeparam>
+    /// <exception cref="ManyConstructorsException">Type contains more than one constructor.</exception>
+    /// <exception cref="NotRegisteredException">Type is not registered.</exception>
+    /// <exception cref="CircularDependenciesException">Circular dependency detected.</exception>
+    public T Resolve<T>()
+      where T : class
+    {
+      return (T)this.Resolve(typeof(T));
+    }
 
     /// <summary>
     /// Registers the class with key.
@@ -67,7 +77,9 @@ namespace PandoInjector
     /// <summary>
     /// Builds the registrations.
     /// </summary>
+    /// <exception cref="ManyConstructorsException">Type contains more than one constructor.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MemberNotNull(nameof(typeProviders))]
     public void Build()
     {
       if (this.typeProviders is not null)
@@ -79,8 +91,47 @@ namespace PandoInjector
     }
 
     /// <summary>
+    /// Resolves the type.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <returns>An object.</returns>
+    /// <exception cref="ManyConstructorsException">Type contains more than one constructor.</exception>
+    /// <exception cref="NotRegisteredException">Type is not registered.</exception>
+    /// <exception cref="CircularDependenciesException">Circular dependency detected.</exception>
+    public object Resolve(Type type)
+    {
+      return this.Resolve(type, new DependencyStack());
+    }
+
+    /// <summary>
+    /// Resolves the type.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <param name="dependencyStack">The dependency stack.</param>
+    /// <returns>An object.</returns>
+    /// <exception cref="ManyConstructorsException">Type contains more than one constructor.</exception>
+    /// <exception cref="NotRegisteredException">Type is not registered.</exception>
+    /// <exception cref="CircularDependenciesException">Circular dependency detected.</exception>
+    internal object Resolve(Type type, DependencyStack dependencyStack)
+    {
+      dependencyStack.Push(type);
+      this.Build();
+
+      if (!this.typeProviders.ContainsKey(type))
+      {
+        throw new NotRegisteredException($"The type {type.Name} is not registered");
+      }
+
+      var instance = this.typeProviders[type].GetInstance(this, dependencyStack);
+      dependencyStack.Pop();
+      return instance;
+    }
+
+    /// <summary>
     /// Generates the type providers dictionary.
     /// </summary>
+    /// <exception cref="ManyConstructorsException">Type contains more than one constructor.</exception>
+    [MemberNotNull(nameof(typeProviders))]
     private void GenerateTypeProvidersDictionary()
     {
       this.typeProviders = new Dictionary<Type, TypeProvider>();
@@ -97,6 +148,7 @@ namespace PandoInjector
     /// </summary>
     /// <param name="pair">The pair.</param>
     /// <returns>A TypeProvider.</returns>
+    /// <exception cref="ManyConstructorsException">Type contains more than one constructor.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private TypeProvider GenerateTypeProvider(KeyValuePair<Type, (Type type, LifeCycleType lifeCycle)> pair)
     {
